@@ -18,7 +18,7 @@ int main()
             case 1:
                 std::cout<<"run 1D function here\n";
                 break;
-           /* case 2:
+            /*case 2:
                 std::cout<<"run 2D function here\n";
                 break;
 
@@ -72,13 +72,25 @@ int Menu::convertToBinary(){
 
 int Menu::createRandomSeed(){
 
-    // get random number between 0 and 256
-    // turn intop binary and return it
+   
+    int randSize= (rand() % 50) + 1;
+    int loop = 0;
+    int randomNumber;  
+    int seed[randSize];
+    int iteration;
 
 
-    int random_integer =int(256*rand()/(RAND_MAX + 1.0));
-    cout << "the ruleset: " << random_integer << " will be used" << endl;
+   do
+   {
+       
+       seed[iteration] = (rand() % randSize) + 1;
+       iteration++;
+       loop = (rand() % 4);
+   }
+    while (loop != 1);
+   
+    
 
 
-    return random_integer;
+    return seed[randSize];
 }
