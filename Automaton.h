@@ -9,7 +9,7 @@ class Automaton {
 
 class Automaton1D : public Automaton {
     private:
-        
+
     public:
         void runGeneration();
         void saveGeneration();
