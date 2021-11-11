@@ -8,7 +8,7 @@ int main()
     do{
         std::cout<<"[0] Quit\n[1] Run 1D Program\n";
         std::cin>>userChoice;
-    
+
          switch(userChoice)
          {
             case 0:
@@ -21,7 +21,7 @@ int main()
            /* case 2:
                 std::cout<<"run 2D function here\n";
                 break;
-            
+
             case 3:
                 std::cout<<"run 3D function here\n";
                 break;
@@ -29,9 +29,9 @@ int main()
                 std::cout<<"Load file\n";
                 break;
             */
-          
-          
-          
+
+
+
         }
 
     }while(userChoice!=0);
@@ -41,10 +41,28 @@ void Menu::displayMenu(){
 
 }
 
-int Menu::getUserChoice(0,0){
+int Menu::getUserChoice(int lowerBound, int upperBound){
+    int userChoice;
+    bool valid = true;
 
-    return 0;
-    
+    while (valid)
+    {
+        cout <<"please enter a number between: "<< lowerBound << "and "<< upperBound<< ": ";
+        cin >> userChoice;
+        if (userChoice >= lowerBound && userChoice <= upperBound)
+        {
+            valid = false;
+        }
+        else{
+            cout<< "please enter a valid choice"<< endl;
+        }
+
+    }
+
+
+
+    return valid;
+
 }
 
 int Menu::convertToBinary(){
@@ -53,6 +71,14 @@ int Menu::convertToBinary(){
 }
 
 int Menu::createRandomSeed(){
-    
-    return 0;
+
+    // get random number between 0 and 256
+    // turn intop binary and return it
+
+
+    int random_integer =int(256*rand()/(RAND_MAX + 1.0));
+    cout << "the ruleset: " << random_integer << " will be used" << endl;
+
+
+    return random_integer;
 }
