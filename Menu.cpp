@@ -41,9 +41,27 @@ void Menu::displayMenu(){
 
 }
 
-int Menu::getUserChoice(0,0){
+int Menu::getUserChoice(int lowerBound, int upperBound){
+    int userChoice;
+    bool valid = true;
+    
+    while (valid)
+    {
+        cout <<"please enter a number between: "<< lowerBound << "and "<< upperBound<< ": ";
+        cin >> userChoice;
+        if (userChoice >= lowerBound && userChoice <= upperBound)
+        {
+            valid = false;
+        }
+        else{
+            cout<< "please enter a valid choice"<< endl;
+        }
+        
+    }
+    
+    
 
-    return 0;
+    return valid;
     
 }
 
@@ -53,6 +71,14 @@ int Menu::convertToBinary(){
 }
 
 int Menu::createRandomSeed(){
-    
-    return 0;
+
+    // get random number between 0 and 256
+    // turn intop binary and return it
+
+
+    int random_integer =int(256*rand()/(RAND_MAX + 1.0));
+    cout << "the ruleset: " << random_integer << " will be used" << endl;
+
+
+    return random_integer;
 }
