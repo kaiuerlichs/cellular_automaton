@@ -72,6 +72,7 @@ int Menu::convertToBinary(){
 
 int Menu::createRandomSeed(){
 
+
     // get random number between 0 and 256
     // turn intop binary and return it
 
@@ -82,3 +83,7 @@ int Menu::createRandomSeed(){
 
     return random_integer;
 }
+
+  
+
+
