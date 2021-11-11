@@ -53,6 +53,6 @@ int Menu::convertToBinary(){
 }
 
 int Menu::createRandomSeed(){
-    
+
     return 0;
 }
