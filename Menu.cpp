@@ -47,8 +47,10 @@ int Menu::getUserChoice(int lowerBound, int upperBound){
 
     while (valid)
     {
+        // gets user input
         cout <<"please enter a number between: "<< lowerBound << "and "<< upperBound<< ": ";
         cin >> userChoice;
+        //input validation
         if (userChoice >= lowerBound && userChoice <= upperBound)
         {
             valid = false;
@@ -60,8 +62,8 @@ int Menu::getUserChoice(int lowerBound, int upperBound){
     }
 
 
-
-    return valid;
+    //returns value
+    return userChoice;
 
 }
 
@@ -70,27 +72,28 @@ int Menu::convertToBinary(){
     return 0;
 }
 
-int Menu::createRandomSeed(){
+char Menu::createRandomSeed(){
 
-   
+   //initialise variables
     int randSize= (rand() % 50) + 1;
     int loop = 0;
-    int randomNumber;  
-    int seed[randSize];
+    int randomNumber;
+    char seed[randSize];
     int iteration;
+    
 
 
    do
    {
-       
-       seed[iteration] = (rand() % randSize) + 1;
-       iteration++;
-       loop = (rand() % 4);
-   }
-    while (loop != 1);
-   
-    
+       //gets random number from 0 to randsize
+        randomNumber = (rand() % randSize);
+        //sets the array's data node for the random number to #
+        seed[randomNumber] = '#';
+        loop = (rand() % 4);
+        iteration++;
 
+    // checks if the loop should randomly end or if the array is full
+   }while (loop != 1 || iteration >= randSize);
 
     return seed[randSize];
 }
