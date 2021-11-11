@@ -4,9 +4,9 @@
 class Menu{
     public:
         void displayMenu();
-        void getUserChoice();   
-        void convertToBinary();
-        void createRandomSeed();
+        int getUserChoice(int lowerBound, int upperBound);   
+        int convertToBinary();
+        int createRandomSeed();
 };
 
 #endif

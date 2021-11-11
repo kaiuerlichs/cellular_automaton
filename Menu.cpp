@@ -41,14 +41,18 @@ void Menu::displayMenu(){
 
 }
 
-void Menu::getUserChoice(){
+int Menu::getUserChoice(0,0){
+
+    return 0;
     
 }
 
-void Menu::convertToBinary(){
+int Menu::convertToBinary(){
 
+    return 0;
 }
 
-void Menu::createRandomSeed(){
-
+int Menu::createRandomSeed(){
+    
+    return 0;
 }
