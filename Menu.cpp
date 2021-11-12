@@ -92,6 +92,7 @@ char Menu::convertToBinary(int number){
 
 char Menu::createRandomSeed(){
 
+
    //initialise variables
     int randSize= (rand() % 50) + 1;
     int loop = 0;
@@ -99,6 +100,11 @@ char Menu::createRandomSeed(){
     char seed[randSize];
     int iteration;
     
+
+
+    // get random number between 0 and 256
+    // turn intop binary and return it
+
 
 
    do
@@ -115,3 +121,7 @@ char Menu::createRandomSeed(){
 
     return seed[randSize];
 }
+
+  
+
+
