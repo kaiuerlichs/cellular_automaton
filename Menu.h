@@ -3,10 +3,10 @@
 
 class Menu{
     public:
-        void displayMenu();
+        void displayMainMenu();
         int getUserChoice(int lowerBound, int upperBound);   
-        int convertToBinary();
-        int createRandomSeed();
+        char convertToBinary(int number);
+        char createRandomSeed();
 };
 
 #endif
