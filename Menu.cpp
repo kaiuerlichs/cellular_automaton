@@ -90,14 +90,14 @@ char* Menu::convertToBinary(int number){
     return binaryArray;//this is wrong!!
 }
 
-char* Menu::createRandomSeed(){
+char* Menu::createRandomSeed(int Size){
 
 
    //initialise variables
-    int randSize= (rand() % 50) + 1;
+    
     int loop = 0;
     int randomNumber;
-    char seed[randSize];
+    char seed[Size];
     int iteration;
     
 
@@ -110,14 +110,24 @@ char* Menu::createRandomSeed(){
    do
    {
        //gets random number from 0 to randsize
-        randomNumber = (rand() % randSize);
+        randomNumber = (rand() % Size);
         //sets the array's data node for the random number to #
         seed[randomNumber] = '1';
         loop = (rand() % 4);
         iteration++;
 
     // checks if the loop should randomly end or if the array is full
-   }while (loop != 1 || iteration >= randSize);
+   }while (loop != 1 || iteration >= Size);
+
+   for (size_t i = 0; i < Size; i++)
+   {
+       if (seed[i] != '1')
+       {
+           seed[i] = '0';
+       }
+       
+   }
+   
 
     return seed;
 }

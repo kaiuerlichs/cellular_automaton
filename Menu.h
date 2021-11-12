@@ -6,7 +6,7 @@ class Menu{
         void displayMainMenu();
         int getUserChoice(int lowerBound, int upperBound);   
         char* convertToBinary(int number);
-        char* createRandomSeed();
+        char* createRandomSeed(int size);
 };
 
 #endif
