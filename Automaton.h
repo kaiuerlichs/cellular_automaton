@@ -1,28 +1,45 @@
 #ifndef AUTOMATON_H
 #define AUTOMATON_H
 
+
+#define RESET   "\033[0m"
+#define BLACK   "\033[30m"
+#define CYAN    "\033[36m"
+#define SQUARE  "\u25A0 "
+
+
+#include <string>
+#include <vector>
+using namespace std;
+
+// Generic class Automaton
 class Automaton {
+    protected:
+        int numberOfIterations;
+        bool generationDone;
     public:
-        void runGeneration();
-        void saveGeneration();
+        virtual void runAutomaton() { };
+        virtual void saveAutomaton() { };
+        int getNumberOfIterations() { return numberOfIterations; }
+        void setNumberOfIterations(int i) { numberOfIterations = i; }
 };
 
+// Derived class Automaton1D
 class Automaton1D : public Automaton {
     private:
+        int width;
+        string seed;
+        string rule;
+        bool wrap;
+        
+        vector<vector<char>> iter;
 
     public:
-        void runGeneration();
-        void saveGeneration();
-        Automaton1D(int width, int number_of_iterations, int seed, int rule);
-};
+        void runAutomaton();
+        void saveAutomaton();
 
-class Automaton2D : public Automaton {
-    private:
-
-    public:
-        void runGeneration();
-        void saveGeneration();
-        Automaton2D(int width, int number_of_iterations, int seed, int rule);
+        Automaton1D(int width, int numberOfIterations, string seed, string rule, bool wraps);
+        
 };
 
 #endif
