@@ -71,7 +71,7 @@ int Menu::getUserChoice(int lowerBound, int upperBound){
 
 }
 
-char Menu::convertToBinary(int number){
+char* Menu::convertToBinary(int number){
     //initialise arrays
     int remainderArray[8] = {0,0,0,0,0,0,0,0};
     char binaryArray[8];
@@ -87,10 +87,10 @@ char Menu::convertToBinary(int number){
     for (int j = 7; j >= 0; j--) {
         binaryArray[j] = '0' + remainderArray[j];
     }
-    return binaryArray[8];//this is wrong!!
+    return binaryArray;//this is wrong!!
 }
 
-char Menu::createRandomSeed(){
+char* Menu::createRandomSeed(){
 
 
    //initialise variables
@@ -119,7 +119,7 @@ char Menu::createRandomSeed(){
     // checks if the loop should randomly end or if the array is full
    }while (loop != 1 || iteration >= randSize);
 
-    return seed[randSize];
+    return seed;
 }
 
   

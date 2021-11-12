@@ -5,8 +5,8 @@ class Menu{
     public:
         void displayMainMenu();
         int getUserChoice(int lowerBound, int upperBound);   
-        char convertToBinary(int number);
-        char createRandomSeed();
+        char* convertToBinary(int number);
+        char* createRandomSeed();
 };
 
 #endif
