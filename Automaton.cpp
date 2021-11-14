@@ -214,16 +214,20 @@ void Automaton1D::saveAutomaton(string filename){
  * @param presetName The name to store the preset under
  */
 void Automaton1D::saveAsPreset(string presetName){
-    string filename("Preset.txt");
+    string filename("preset.txt");
+
+    // Open new file output stream
     ofstream file_out;
-     if (file_out.is_open())
-    {
-        file_out.open(filename, std::ios_base::app);
+    file_out.open(filename, std::ios_base::app);
+
+    // Check if stream creation was successful
+    if (file_out.is_open()){
+        // Write preset to file
         file_out << presetName<<";"<<width<<";"<<numberOfIterations<<";"<<seed<<";"<<rule<<";"<<wrap << endl;
-        cout << "saved" << endl;
     }
+    // Throw exception otherwise
     else{
-        cout<< "file failed to open"<<endl;
+        throw runtime_error("Preset could not be saved");
     }
     return;
 }
@@ -277,23 +281,31 @@ Automaton2D::Automaton2D(int width, int height, int numberOfIterations, string s
  * @brief Runs the 2D Automaton's generation algorithm
  */
 void Automaton2D::runAutomaton(){
+    // Iterate through all generations
     for(int i = 1; i <= numberOfIterations; i++){
+        // Create generation pointers
         Generation2D* previous = &iter[i-1];
         Generation2D* current = &iter[i];
 
+        // Iterate over each cell in the new generation
         for(int x = 0; x < width; x++){
             for(int y = 0; y < height; y++){
+                // Create a counter of alive neighbour cells 
                 int neighbourCells = 0;
                 
+                // Iterate over all surrounding cells
                 for(int c = -1; c <= 1; c++){
                     for(int d = -1; d <= 1; d++){
+                        // Skip the cell itself
                         if (c == 0 && d==0){
                             continue;
                         }
 
+                        // Get coordinates to check
                         int x_check = x + c;
                         int y_check = y + d;
 
+                        // Border checking (wrap or no-wrap)
                         if (x_check < 0){
                             if(!wrap) continue;
                             x_check = width-1;
@@ -311,12 +323,14 @@ void Automaton2D::runAutomaton(){
                             y_check = 0;
                         }
                         
+                        // Check if selected cell is alive
                         if(previous->generation[x_check][y_check] == '1'){
                             neighbourCells++;
                         }
                     }
                 }
 
+                // Set new state for current cell
                 if(previous->generation[x][y] == '1'){
                     if(neighbourCells == 2 || neighbourCells == 3){
                         current->generation[x][y] = '1';
@@ -337,8 +351,10 @@ void Automaton2D::runAutomaton(){
         }
     }
 
+    // Set generation as done
     generationDone = true;
 
+    // Pretty-print each generation
     for(Generation2D g : iter){
         for(int x = 0; x < width; x++){
             for(int y = 0; y < height; y++){
@@ -357,6 +373,11 @@ void Automaton2D::runAutomaton(){
     }
 }
 
+/**
+ * @brief Saves the output to a specified filename
+ * 
+ * @param filename The filename to store the output in 
+ */
 void Automaton2D::saveAutomaton(string filename){
     // Check if automaton was created
     if(!generationDone){
