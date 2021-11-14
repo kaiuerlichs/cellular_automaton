@@ -15,6 +15,8 @@
 #ifndef AUTOMATON_H
 #define AUTOMATON_H
 
+
+
 // Define colour and symbol constants for output formatting
 #define RESET   "\033[0m"
 #define BLACK   "\033[30m"
@@ -25,6 +27,18 @@
 #include <string>
 #include <vector>
 using namespace std;
+
+/**
+ * @brief Struct to store generation data for a 2D Automaton
+ */
+struct Generation2D {
+    vector<vector<char>> generation;
+    int width;
+    int height;
+    Generation2D(int pWidth, int pHeight) : width(pWidth), height(pHeight) {
+        generation.assign(height, vector<char> (width, '0'));
+    };
+};
 
 /**
  * @brief The Automaton class represents a generic automaton with some pre-defined methods and fields
@@ -86,12 +100,7 @@ class Automaton2D : public Automaton {
         Automaton2D(int width, int height, int numberOfIterations, string seed, bool wrap);
 };
 
-/**
- * @brief Struct to store generation data for a 2D Automaton
- */
-typedef struct generation2d {
-    vector<vector<char>> generation;
-} Generation2D;
+
 
 // End of header guard
 #endif
