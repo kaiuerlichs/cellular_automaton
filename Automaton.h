@@ -36,7 +36,8 @@ class Automaton1D : public Automaton {
 
     public:
         void runAutomaton();
-        void saveAutomaton();
+        void saveAutomaton(string filename);
+        void saveAsPreset(string presetName);
 
         Automaton1D(int width, int numberOfIterations, string seed, string rule, bool wraps);
         

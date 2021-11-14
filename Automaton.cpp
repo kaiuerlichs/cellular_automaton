@@ -101,7 +101,11 @@ void Automaton1D::runAutomaton(){
     }
 }
 
-void Automaton1D::saveAutomaton(){
+void Automaton1D::saveAutomaton(string filename){
+    return;
+}
+
+void Automaton1D::saveAsPreset(string presetName){
     return;
 }
 
