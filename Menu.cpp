@@ -1,6 +1,6 @@
-#include <iostream>
 #include "Menu.h"
-#include "Automaton.cpp"
+#include "Automaton.h"
+#include <iostream>
 using namespace std;
 
 int main()
@@ -112,7 +112,7 @@ int Menu::getUserChoice(int lowerBound, int upperBound){
 
 }
 
-char* Menu::convertToBinary(int number, int numOfBits){
+string Menu::convertToBinary(int number, int numOfBits){
     //initialise arrays
     int remainderArray[numOfBits];
     //loop and set all values to 0
@@ -151,7 +151,7 @@ int Menu::convertToDecimal(char number[], int numOfBits){
     return decimal;
 }
 
-char* Menu::createRandomSeed(int Size){
+string Menu::createRandomSeed(int Size){
    //initialise variables
     
     int loop = 0;
