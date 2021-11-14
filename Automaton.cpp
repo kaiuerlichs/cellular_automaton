@@ -15,6 +15,7 @@
 #include "Automaton.h"
 #include <iostream>
 #include <fstream>
+#include <sstream>
 using namespace std;
 
 
@@ -180,8 +181,21 @@ void Automaton1D::saveAutomaton(string filename){
  * @param presetName The name to store the preset under
  */
 void Automaton1D::saveAsPreset(string presetName){
+    string filename("Preset.txt");
+    ofstream file_out;
+     if (file_out.is_open())
+    {
+        file_out.open(filename, std::ios_base::app);
+        file_out << presetName<<";"<<width<<";"<<numberOfIterations<<";"<<seed<<";"<<rule<<";"<<wrap << endl;
+        cout << "saved" << endl;
+    }
+    else{
+        cout<< "file failed to open"<<endl;
+    }
     return;
 }
+
+
 
 
 
