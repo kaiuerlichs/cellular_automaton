@@ -220,6 +220,15 @@ void Automaton1D::saveAsPreset(string presetName){
 
 /* AUTOMATON 2D IMPLEMENTATIONS */
 
+/**
+ * @brief Construct a new Automaton 2D object
+ * 
+ * @param width The width of each generation
+ * @param height The height of each generation
+ * @param numberOfIterations The nu,ber of iteratiosn for the program (number of new generations)
+ * @param seed The seed for the 2D automaton, in form "x1,y1 x2,y2 x3,y3"
+ * @param wrap Whether the automaton wraps into a 3D taurus or not
+ */
 Automaton2D::Automaton2D(int width, int height, int numberOfIterations, string seed, bool wrap){
     // Validate input parameters
     if(width <= 0 || height <= 0 || numberOfIterations <= 0){
@@ -250,6 +259,9 @@ Automaton2D::Automaton2D(int width, int height, int numberOfIterations, string s
     }
 }
 
+/**
+ * @brief Runs the 2D Automaton's generation algorithm
+ */
 void Automaton2D::runAutomaton(){
     for(int i = 1; i <= numberOfIterations; i++){
         Generation2D* previous = &iter[i-1];
