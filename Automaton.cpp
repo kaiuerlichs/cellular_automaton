@@ -105,8 +105,8 @@ void Automaton1D::saveAutomaton(){
     return;
 }
 
-int main(){
-    Automaton1D a1(31, 15, "0000000000000001000000000000000", "00011110" ,false);
-    a1.runAutomaton();
-    return 0;
-}
+// int main(){
+//     Automaton1D a1(31, 15, "0000000000000001000000000000000", "00011110" ,false);
+//     a1.runAutomaton();
+//     return 0;
+// }
