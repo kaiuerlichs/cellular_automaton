@@ -329,8 +329,20 @@ void Menu::loadPreset(){
     run1DAutomaton(width, numberOfIterations, seed, rule, wrap);
 }
 
+/**
+ * @brief Run a 1D automaton
+ * 
+ * @param width The width of the 1D automaton
+ * @param numberOfIterations The number of iterations (generations) to generate
+ * @param seed The start value for the automaton
+ * @param rule The ruleset by which a cell's value is decided each generation
+ * @param wrap Whether the ends of the automaton are connected (true) or separated (false)
+ */
 void Menu::run1DAutomaton(int width, int numberOfIterations, string seed, string rule, bool wrap){
+    // Create automaton
     Automaton1D automaton(width,numberOfIterations,seed,rule,wrap);
+    
+    // Attempt to run automaton
     cout << "Displaying automaton generations below...\n" << endl;
     try{
         automaton.runAutomaton();
@@ -341,29 +353,138 @@ void Menu::run1DAutomaton(int width, int numberOfIterations, string seed, string
     }
     cout << endl;
 
+    // Ask if user wants to save the output
     cout << "Do you want to save the output to a text file? [0] yes [1] no" << endl;
     int textSave = getUserChoice(0,1);
 
+    // If the user confirms
     if(textSave == 0){
-        // Save to text file here
+        cout << "Please enter the name of your text file: ";
+        
+        // Read in file name
+        string filename;
+        cin >> filename;
+
+        try{
+            automaton.saveAutomaton(filename);
+        }
+        catch(exception& e){
+            cout << "Saving the automaton returned an error message: " << e.what() << endl;
+        }
     }
 
+    // Ask if the user wants to save the preset
     cout << "Do you want to save this automaton as a preset? [0] yes [1] no" << endl;
     int presetSave = getUserChoice(0,1);
 
+    // If the user confirms
     if(presetSave == 0){
-        // Save preset here
+        cout << "Please enter the name of your preset: ";
+
+        // Read in preset name
+        string presetname;
+        cin >> presetname;
+
+        try{
+            automaton.saveAsPreset(presetname);
+        }
+        catch(exception& e){
+            cout << "Saving the preset returned an error message: " << e.what() << endl;
+        }
     }
+    cout << endl;
 }
 
+/**
+ * @brief Creates and runs a 2D Automaton
+ * 
+ * @param width The width of the map
+ * @param height The height of the map
+ * @param numberOfIterations The number of iterations (generations) to produce
+ * @param seed The seed for the automaton
+ */
 void Menu::run2DAutomaton(int width, int height, int numberOfIterations, string seed){
     bool wrap = false;
 
-    // Implement
+    // Create automaton
+    Automaton2D automaton(width,height,numberOfIterations,seed,wrap);
+    
+    // Attempt to run automaton
+    cout << "Displaying automaton generations below...\n" << endl;
+    try{
+        automaton.runAutomaton();
+    }
+    catch(exception& e){
+        cout << "The Automaton simulation returned an error message: " << e.what() << endl;
+        return;
+    }
+    cout << endl;
+
+    // Ask if user wants to save the output
+    cout << "Do you want to save the output to a text file? [0] yes [1] no" << endl;
+    int textSave = getUserChoice(0,1);
+
+    // If the user confirms
+    if(textSave == 0){
+        cout << "Please enter the name of your text file: ";
+        
+        // Read in file name
+        string filename;
+        cin >> filename;
+
+        try{
+            automaton.saveAutomaton(filename);
+        }
+        catch(exception& e){
+            cout << "Saving the automaton returned an error message: " << e.what() << endl;
+        }
+    }
+    cout << endl;
 }
 
+/**
+ * @brief Creates and runs a 2D Automaton in 3D (wrapped) mode (torus shape)
+ * 
+ * @param width The width of the map
+ * @param height The height of the map
+ * @param numberOfIterations The number of iterations (generations) to produce
+ * @param seed The seed for the automaton
+ */
 void Menu::run3DAutomaton(int width, int height, int numberOfIterations, string seed){
     bool wrap = true;
 
-    // Implement
+    // Create automaton
+    Automaton2D automaton(width,height,numberOfIterations,seed,wrap);
+    
+    // Attempt to run automaton
+    cout << "Displaying automaton generations below...\n" << endl;
+    try{
+        automaton.runAutomaton();
+    }
+    catch(exception& e){
+        cout << "The Automaton simulation returned an error message: " << e.what() << endl;
+        return;
+    }
+    cout << endl;
+
+    // Ask if user wants to save the output
+    cout << "Do you want to save the output to a text file? [0] yes [1] no" << endl;
+    int textSave = getUserChoice(0,1);
+
+    // If the user confirms
+    if(textSave == 0){
+        cout << "Please enter the name of your text file: ";
+        
+        // Read in file name
+        string filename;
+        cin >> filename;
+
+        try{
+            automaton.saveAutomaton(filename);
+        }
+        catch(exception& e){
+            cout << "Saving the automaton returned an error message: " << e.what() << endl;
+        }
+    }
+    cout << endl;
 }
