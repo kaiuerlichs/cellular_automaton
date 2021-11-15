@@ -277,6 +277,9 @@ string Menu::createRandomSeed(int Size){
     return seed;
 }
 
+/**
+ * @brief Loads a preset for a 1D automaton
+ */
 void Menu::loadPreset(){
     // Check if file exists
     ifstream in;
