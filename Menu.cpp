@@ -287,7 +287,7 @@ void Menu::loadPreset(){
     }
 
     cout << "Please select one of the presets below..." << endl;
-
+    // prints the names of the presets
     string str;
     int counter = 1;
     while (in >> str)
@@ -297,20 +297,23 @@ void Menu::loadPreset(){
         counter++;
     }
 
+
     int selection = getUserChoice(1,counter-1);
 
+    // clears and begins the file loop
     in.clear();
     in.seekg (0, ios::beg);
 
+    // gets user input for name of preset
     string preset;
     for(int i =0; i < selection; i++){
         in >> preset;
     }
 
     in.close();
-
+    //splits the line from file
     vector<string> params = strsplit(preset.c_str(),';');
-    
+    // sets variables to file values
     int width = stoi(params[1]);
     int numberOfIterations = stoi(params[2]);
     string seed = params[3];
@@ -322,7 +325,7 @@ void Menu::loadPreset(){
     else{
         wrap = false;
     }
-
+    //passes variables to function for running
     run1DAutomaton(width, numberOfIterations, seed, rule, wrap);
 }
 
