@@ -18,6 +18,7 @@
 #include <iostream>
 #include <fstream>
 #include <ctime>
+#include <cmath>
 using namespace std;
 
 
@@ -30,7 +31,10 @@ using namespace std;
 int main()
 {
     Menu menu;
-    menu.loadPreset();
+    //menu.displayMainMenu();
+    //cout << menu.convertToBinary(0,8);
+    cout << menu.convertToDecimal(menu.convertToBinary(0,8), 8);
+    cout << menu.convertToDecimal(menu.convertToBinary(43,8), 8);
 }
 
 /**
@@ -71,7 +75,7 @@ void Menu::displayMainMenu(){
                 string seed;
                 do {
                     std::cout<<"\nPlease enter the seed (must be " << width << " long): " << endl;
-                    seed = getUserChoice(0,(2*10)^width);
+                    seed = getUserChoice(0,INT32_MAX);
                 } while((int)seed.length() != width);
 
                 //run automaton
@@ -94,15 +98,20 @@ void Menu::displayMainMenu(){
             case 2: { // {} to makevariables local to this case
                 std::cout<<"\nWhich way would you like to convert?\n[0] Binary->Decimal\n[1] Decimal->Binary" << endl;
                 int convertChoice = getUserChoice(0, 1);
-                if(convertChoice == 1) {
-                    std::cout<<"\n-- binary conv --";
-                } else if (convertChoice == 2)
+                if(convertChoice == 0) {
+                    std::cout<<"\nEnter how many bits the binary number has" << endl;
+                    int bits = getUserChoice(1, 64);
+                    std::cout<<"\nEnter binary number you'd like to convert (maximum " << (pow(2, bits)) << ")" << endl;
+                    int binary = getUserChoice(1, (pow(2, bits)));
+                    cout << binary;
+                    //cout << convertToDecimal(binary, bits);
+                } else if (convertChoice == 1)
                 {
                     std::cout<<"\nEnter how many bits you'd like to store this in" << endl;
                     int bits = getUserChoice(1, 64);
-                    std::cout<<"\nEnter decimal number you'd like to convert (maximum " << (2^bits) << ")" << endl;
-                    int decimal = getUserChoice(1, (2^bits));
-                    convertToBinary(bits, decimal);
+                    std::cout<<"\nEnter decimal number you'd like to convert (maximum " << (pow(2, bits)) << ")" << endl;
+                    int decimal = getUserChoice(1, (pow(2, bits)));
+                    cout << convertToBinary(decimal, bits);
                 }
                 break;
             }
@@ -162,7 +171,7 @@ string Menu::convertToBinary(int number, int numOfBits){
     //initialise arrays
     int remainderArray[numOfBits];
     //loop and set all values to 0
-    for (int c = 0; c < numOfBits-1; c++) {
+    for (int c = 0; c < numOfBits; c++) {
         remainderArray[c] = 0;
     }
     char binaryArray[numOfBits];
@@ -175,10 +184,13 @@ string Menu::convertToBinary(int number, int numOfBits){
         i ++;
     }
     //convert int -> char
+    int reverse = 0;
     for (int j = numOfBits-1; j >= 0; j--) {
-        binaryArray[j] = '0' + remainderArray[j];
+        binaryArray[reverse] = '0' + remainderArray[j];
+        reverse ++;
     }
-    return binaryArray;
+    string strArray(binaryArray);
+    return strArray.substr(0,numOfBits);
 }
 
 /**
@@ -189,7 +201,6 @@ string Menu::convertToBinary(int number, int numOfBits){
  * @return int The decimal number
  */
 int Menu::convertToDecimal(string number, int numOfBits){
-    
     //initialise values
     int counter = 0;
     int decimal = 0;
@@ -197,7 +208,7 @@ int Menu::convertToDecimal(string number, int numOfBits){
     for(int i = numOfBits-1; i >= 0; i--) {
         //if 1 then add to total
         if(number[i] == '1') {
-            decimal = decimal + (2^counter);
+            decimal = decimal + (pow(2, counter));
         }
         counter++;
     }
