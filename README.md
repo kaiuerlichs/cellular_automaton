@@ -1,1 +1,0 @@
-# celluluar_automaton

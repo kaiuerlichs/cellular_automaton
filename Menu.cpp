@@ -209,11 +209,48 @@ void Menu::displayMainMenu(){
 
             // Display automaton output file
             case 5: {
+                loadSaveFile();
                 break;
             }
 
             // Binary - decimal conversion
             case 6: {
+                // Choose direction
+                cout<<"\nConversion direction: [0] Decimal->Binary [1] Binary->Decimal" << endl;
+                int dir = getUserChoice(0, 1);
+
+                if(dir == 0){
+                    // Get user input
+                    cout<<"\nEnter the bit maximum length for your binary number" << endl;
+                    int bits = getUserChoice(0, 31);
+
+                    cout<<"\nEnter the decimal number to convert..." << endl;
+                    int dec = getUserChoice(0, pow(2,bits)-1);
+
+                    // Convert
+                    cout<<"\n"<<dec<<" in binary is "<<convertToBinary(dec, bits)<<"."<<endl;
+                }
+                else{
+                    // Get user input
+                    cout<<"\nEnter the bit length for your binary number" << endl;
+                    int bits = getUserChoice(0, 31);
+
+                    string bin;
+                    cout<<"\nEnter the decimal number to convert..." << endl;
+                    cin >> bin;
+
+                    // Convert
+                    for(int i = 0; i < (int) bin.length(); i++){
+                        // Validate
+                        if(!(bin.at(i) == '1' || bin.at(i) == '0')){
+                            cout << "The value you entered is not a binary number." << endl;
+                            return;
+                        }
+                    }
+
+                    cout<<"\n"<<bin<<" in decimal is "<<convertToDecimal(bin, bits)<<"."<<endl;
+                }
+
                 break;
             }
 
@@ -577,4 +614,23 @@ void Menu::run3DAutomaton(int width, int height, int numberOfIterations, string 
         }
     }
     cout << endl;
+}
+
+/**
+ * @brief Loads a text save file and pretty-prints it
+ */
+void Menu::loadSaveFile(){
+    // Get filename
+    string filename;
+    cout<<"\nPlease enter the name of the file to display..." << endl;
+    cin.ignore(1000, '\n');
+    getline(cin,filename);
+
+    // Call static method
+    try{
+        Automaton::displaySaveFile(filename);
+    }
+    catch(invalid_argument& e){
+        cout<<"\nThat file does not exist." << endl;
+    }
 }

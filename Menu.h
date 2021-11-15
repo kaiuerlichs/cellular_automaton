@@ -35,6 +35,7 @@ class Menu{
         int convertToDecimal(string number, int numOfBits);
         string createRandomSeed(int size);
         void loadPreset();
+        void loadSaveFile();
         void run1DAutomaton(int width, int numberOfIterations, string seed, string rule, bool wrap);
         void run2DAutomaton(int width, int height, int numberOfIterations, string seed);
         void run3DAutomaton(int width, int height, int numberOfIterations, string seed);

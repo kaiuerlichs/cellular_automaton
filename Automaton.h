@@ -52,6 +52,7 @@ class Automaton {
         virtual void saveAutomaton(string filename) { (void) filename; };
         int getNumberOfIterations() { return numberOfIterations; }
         void setNumberOfIterations(int i) { numberOfIterations = i; }
+        static void displaySaveFile(string filename);
 };
 
 /**

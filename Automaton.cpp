@@ -17,7 +17,38 @@
 #include <iostream>
 #include <fstream>
 #include <sstream>
+#include <regex>
 using namespace std;
+
+/* AUTOMATON IMPLEMENTATIONS */
+
+/**
+ * @brief Displays a text file version of an Automaton
+ * 
+ * @param filename The file to display
+ */
+void Automaton::displaySaveFile(string filename){
+    // Check if file exists
+    ifstream in;
+    in.open(filename);
+    if(!in){
+        throw invalid_argument("File does not exist");
+    }
+
+    char c;
+    while (in.get(c)) {
+        if(c == '1'){
+                cout << CYAN << SQUARE << RESET;
+            }
+        else if(c == '0'){
+            cout << BLACK << SQUARE << RESET;
+        }
+        else if(c == '\n'){
+            cout << endl;
+        }
+    }
+    in.close();
+}
 
 
 
