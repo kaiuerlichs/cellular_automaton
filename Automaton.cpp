@@ -38,7 +38,7 @@ void Automaton::displaySaveFile(string filename){
     char c;
     while (in.get(c)) {
         if(c == '1'){
-                cout << CYAN << SQUARE << RESET;
+                cout << colour << SQUARE << RESET;
             }
         else if(c == '0'){
             cout << BLACK << SQUARE << RESET;
@@ -49,6 +49,9 @@ void Automaton::displaySaveFile(string filename){
     }
     in.close();
 }
+
+// Set default colour to CYAN
+string Automaton::colour = "\033[36m";
 
 
 
@@ -158,7 +161,7 @@ void Automaton1D::runAutomaton(){
     for(vector<char> v : iter){
         for (char c : v){
             if(c == '1'){
-                cout << CYAN << SQUARE << RESET;
+                cout << colour << SQUARE << RESET;
             }
             else{
                 cout << BLACK << SQUARE << RESET;
@@ -365,7 +368,7 @@ void Automaton2D::runAutomaton(){
                 char c = g.generation[x][y];
 
                 if(c == '1'){
-                    cout << CYAN << SQUARE << RESET;
+                    cout << colour << SQUARE << RESET;
                 }
                 else{
                     cout << BLACK << SQUARE << RESET;

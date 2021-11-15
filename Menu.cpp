@@ -21,8 +21,6 @@
 #include <cmath>
 using namespace std;
 
-
-
 /**
  * @brief This is the main method of the Automaton program
  * 
@@ -31,6 +29,7 @@ using namespace std;
 int main()
 {
     Menu menu;
+
     menu.displayMainMenu();
 }
 
@@ -48,9 +47,10 @@ void Menu::displayMainMenu(){
         cout << "[3] Create Conway's Game of Life (3D torus)" << endl;
         cout << "[4] Load 1D Automaton from preset" << endl;
         cout << "[5] Display automaton output file" << endl;
-        cout << "[6] Binary - decimal conversion\n" << endl;
+        cout << "[6] Binary - decimal conversion" << endl;
+        cout << "[7] Change output colour\n" << endl;
 
-        userChoice = getUserChoice(0, 6);
+        userChoice = getUserChoice(0, 7);
         switch(userChoice) {
             // Quit
             case 0:
@@ -254,6 +254,12 @@ void Menu::displayMainMenu(){
                 break;
             }
 
+            // Set output colour
+            case 7: {
+                changeColour();
+                break;
+            }
+            
             // Default case (failsafe only)
             default:
                 cout<<"\nThe input received is invalid" << endl;
@@ -632,5 +638,37 @@ void Menu::loadSaveFile(){
     }
     catch(invalid_argument& e){
         cout<<"\nThat file does not exist." << endl;
+    }
+}
+
+/**
+ * @brief Changes the output colour of the automaton
+ */
+void Menu::changeColour(){
+    cout << "Select a colour below..." << endl;
+
+    cout << "\n[0] Don't change" << endl; 
+    cout << "[1] Cyan" << endl;
+    cout << "[2] Red" << endl;
+    cout << "[3] Green" << endl;
+    cout << "[4] Magenta" << endl;
+    cout << "[5] White" << endl;
+    cout << "[6] Blue" << endl;
+    cout << "[7] Yellow\n" << endl;
+
+    // Get user input
+    int selection = getUserChoice(0,7);
+
+    // Set the static colour
+    switch(selection){
+        case 0: { cout << "\nNothing changed..." << endl; break; }
+        case 1: { Automaton::colour = "\033[36m"; cout << "\nChanged to cyan..." << endl; break; }
+        case 2: { Automaton::colour = "\033[35m"; cout << "\nChanged to red..." << endl; break; }
+        case 3: { Automaton::colour = "\033[32m"; cout << "\nChanged to green..." << endl; break; }
+        case 4: { Automaton::colour = "\033[31m"; cout << "\nChanged to magenta..." << endl; break; }
+        case 5: { Automaton::colour = "\033[37m"; cout << "\nChanged to white..." << endl; break; }
+        case 6: { Automaton::colour = "\033[34m"; cout << "\nChanged to blue..." << endl; break; }
+        case 7:  { Automaton::colour = "\033[33m"; cout << "\nChanged to yellow..." << endl; break; }
+        default:  { cout << "\nSomething went wrong..." << endl; break; }
     }
 }

@@ -48,6 +48,7 @@ class Automaton {
         int numberOfIterations;
         bool generationDone;
     public:
+        static string colour;
         virtual void runAutomaton() { };
         virtual void saveAutomaton(string filename) { (void) filename; };
         int getNumberOfIterations() { return numberOfIterations; }
