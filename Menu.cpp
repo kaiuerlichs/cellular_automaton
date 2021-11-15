@@ -14,43 +14,12 @@
 // Required std includes and namespace setting
 #include "Menu.h"
 #include "Automaton.h"
+#include "helper.h"
 #include <iostream>
 #include <fstream>
 #include <ctime>
+#include <cmath>
 using namespace std;
-
-
-
-/* Support functions */
-
-/**
- * @brief A function to tokenize a string based on a delimiter and return a corresponding vector
- * 
- * @param str The string to tokenize
- * @param c The delimter character
- * @return vector<string> A vector of string tokens
- * 
- * @authors https://stackoverflow.com/questions/53849/how-do-i-tokenize-a-string-in-c
- * @note Comments added by group members
- */
-vector<string> strsplit(const char *str, char c = ' '){
-    // A vector to hold the tokens
-    vector<string> result;
-
-    // Iterate over string and push-back when delimiter found
-    do
-    {
-        const char *begin = str;
-
-        while(*str != c && *str)
-            str++;
-
-        result.push_back(string(begin, str));
-    } while (0 != *str++);
-
-    // Return the results
-    return result;
-}
 
 
 
@@ -62,7 +31,7 @@ vector<string> strsplit(const char *str, char c = ' '){
 int main()
 {
     Menu menu;
-    menu.loadPreset();
+    menu.displayMainMenu();
 }
 
 /**
@@ -71,76 +40,189 @@ int main()
 void Menu::displayMainMenu(){
     int userChoice;
     do{
-        std::cout<<"[0] Quit\n[1] Run 1D Program\n[2] Use Converters\n";
-        userChoice = getUserChoice(0, 2);
+        cout << CYAN << "~~ Automaton Simulation ~~" << RESET << endl;
+
+        cout << "\n[0] Quit" << endl; 
+        cout << "[1] Create 1D Automaton" << endl;
+        cout << "[2] Create Conway's Game of Life (2D plane)" << endl;
+        cout << "[3] Create Conway's Game of Life (3D torus)" << endl;
+        cout << "[4] Load 1D Automaton from preset" << endl;
+        cout << "[5] Display automaton output file" << endl;
+        cout << "[6] Binary - decimal conversion\n" << endl;
+
+        userChoice = getUserChoice(0, 6);
         switch(userChoice) {
+            // Quit
             case 0:
-                std::cout<<"~~ Exiting ~~" << endl;
+                cout<<"\n~~ Exiting ~~" << endl;
                 userChoice = 0;
                 break;
-            case 1: { // {} to makevariables local to this case
-                //get informations
-                std::cout<<"Please enter width:" << endl;
+
+            // Create 1D Automaton
+            case 1: { 
+                // Get width from user
+                cout<<"\nPlease enter width..." << endl;
                 int width = getUserChoice(1, 100);
 
-                std::cout<<"Please enter number of iterations:" << endl;
+                // Get iteration count from user
+                cout<<"\nPlease enter number of iterations..." << endl;
                 int iterations = getUserChoice(1, 1000);
 
-                std::cout<<"Please enter rule:" << endl;
+                // Random or user rule?
                 string rule;
-                cin >> rule;
+                cout<<"\nAutomaton rule: [0] User-specified [1] Random" << endl;
+                int randomRule = getUserChoice(0, 1);
+                if(randomRule == 0){
+                    // Get rule from user
+                    cout<<"\nPlease enter the rule (8-bit binary or decimal between 0 and 255 inclusive)..." << endl;
+                    cin >> rule;
 
-                std::cout<<"Should automaton be wrapped [0]false [1]true:" << endl;
-                int wrappedChoice = getUserChoice(0, 1);
-                bool wrapped;
-                if(wrappedChoice == 1) {
-                    wrapped = true;
-                } else
-                {
-                    wrapped = false;
+                    // Validate rule input
+                    try{
+                        int ruleNum = stoi(rule);
+                        if (ruleNum >= 0 && ruleNum < 256){
+                            rule = convertToBinary(ruleNum, 8);
+                        }
+                        else{
+                            if((int) rule.length() != 8){
+                                    throw invalid_argument("Rule is not 8 bit");
+                                }
+                            for(int i = 0; i < (int) rule.length(); i++){
+                                if(!(rule.at(i) == '1' || rule.at(i) == '0')){
+                                    throw invalid_argument("Rule is not binary");
+                                }
+                            }
+                        }
+                    }
+                    catch(invalid_argument& e1){
+                        cout << "\nThe rule entered is not valid." << endl;
+                        break;
+                    }
                 }
-                
+                else{
+                    rule = createRandomSeed(8);
+                    cout << "Random rule generated: " << rule << endl;
+                }
+
+                // Random or user seed?
                 string seed;
-                do {
-                    std::cout<<"Please enter the seed (must be " << width << " long: " << endl;
-                } while((int)seed.length() != width);
+                cout<<"\nAutomaton seed: [0] User-specified [1] Random" << endl;
+                int randomSeed = getUserChoice(0, 1);
+                if(randomSeed == 0){
+                    // Get seed from user
+                    cout<<"\nPlease enter the seed (" << width << "-bit binary)..." << endl;
+                    cin >> seed;
 
-                //run automaton
-                Automaton1D automaton = Automaton1D(width, iterations, seed, rule, wrapped);
-                automaton.runAutomaton();
+                    // Validate seed input
+                    try{
+                        if((int) seed.length() != width){
+                                throw invalid_argument("Seed is invalid bit length");
+                            }
+                        for(int i = 0; i < (int) seed.length(); i++){
+                            if(!(seed.at(i) == '1' || seed.at(i) == '0')){
+                                throw invalid_argument("Seed is not binary");
+                            }
+                        }
+                    }
+                    catch(invalid_argument& e1){
+                        cout << "\nThe seed entered is not valid." << endl;
+                        break;
+                    }
+                }
+                else{
+                    seed = createRandomSeed(width);
+                    cout << "Random seed generated: " << seed << endl;
+                }
 
-                //saving
-                std::cout<<"Would you like to save this output to a file?\n[0] No [1] Yes" << endl;
-                int saveChoice = getUserChoice(0, 1);
-                if(saveChoice == 1) {
-                    std::cout<<"-- save to file --";
+                // Get wrap state
+                bool wrap;
+                cout<<"\nWrap automaton bounds [0] No [1] Yes" << endl;
+                int wrapInput = getUserChoice(0, 1);
+                
+                if(wrapInput == 0){
+                    wrap = false;
                 }
-                std::cout<<"Would you like to save this as a preset?\n[0] No [1] Yes" << endl;
-                saveChoice = getUserChoice(0, 1);
-                if(saveChoice == 1) {
-                    std::cout<<"-- save as preset --";
+                else{
+                    wrap = true;
                 }
+
+                // Run automaton
+                run1DAutomaton(width,iterations,seed,rule,wrap);
                 break;
             }
-            case 2: { // {} to makevariables local to this case
-                std::cout<<"Which way would you like to convert?\n[0] Binary->Decimal [1] Decimal->Binary" << endl;
-                int convertChoice = getUserChoice(0, 1);
-                if(convertChoice == 1) {
-                    std::cout<<"-- binary conv --";
-                } else if (convertChoice == 2)
-                {
-                    std::cout<<"Enter how many bits you'd like to store this in" << endl;
-                    int bits = getUserChoice(1, 64);
-                    std::cout<<"Enter decimal number you'd like to convert (maximum " << (2^bits) << endl;
-                    int decimal = getUserChoice(1, (2^bits));
-                    convertToBinary(bits, decimal);
-                }
+
+            // Create 2D Automaton
+            case 2: { 
+                // Get width from user
+                cout<<"\nPlease enter width..." << endl;
+                int width = getUserChoice(1, 100);
+
+                // Get height from user
+                cout<<"\nPlease enter height..." << endl;
+                int height = getUserChoice(1, 100);
+
+                // Get iteration count from user
+                cout<<"\nPlease enter number of iterations..." << endl;
+                int iterations = getUserChoice(1, 1000);
+
+                string seed;
+                cout<<"\nPlease enter the seed in coordinate form..." << endl;
+                cout<<"\nExample seed: 3,3 3,4 3,5" << endl;
+
+                cin.ignore(1000, '\n');
+                getline(cin,seed);
+
+                run2DAutomaton(width,height,iterations,seed);
                 break;
             }
+
+            // Create 3D Automaton
+            case 3: {
+                // Get width from user
+                cout<<"\nPlease enter width..." << endl;
+                int width = getUserChoice(1, 100);
+
+                // Get height from user
+                cout<<"\nPlease enter height..." << endl;
+                int height = getUserChoice(1, 100);
+
+                // Get iteration count from user
+                cout<<"\nPlease enter number of iterations..." << endl;
+                int iterations = getUserChoice(1, 1000);
+
+                string seed;
+                cout<<"\nPlease enter the seed in coordinate form..." << endl;
+                cout<<"\nExample seed: 3,3 3,4 3,5" << endl;
+
+                cin.ignore(1000, '\n');
+                getline(cin,seed);
+
+                run3DAutomaton(width,height,iterations,seed);
+                break;
+            }
+
+            // Load 1D Automaton from preset
+            case 4: {
+                loadPreset();
+                break;
+            }
+
+            // Display automaton output file
+            case 5: {
+                break;
+            }
+
+            // Binary - decimal conversion
+            case 6: {
+                break;
+            }
+
+            // Default case (failsafe only)
             default:
-                std::cout<<"invalid";
+                cout<<"\nThe input received is invalid" << endl;
                 break;
         }
+        cout << endl;
     } while(userChoice!=0);
 }
 
@@ -193,7 +275,7 @@ string Menu::convertToBinary(int number, int numOfBits){
     //initialise arrays
     int remainderArray[numOfBits];
     //loop and set all values to 0
-    for (int c = 0; c < numOfBits-1; c++) {
+    for (int c = 0; c < numOfBits; c++) {
         remainderArray[c] = 0;
     }
     char binaryArray[numOfBits];
@@ -206,10 +288,13 @@ string Menu::convertToBinary(int number, int numOfBits){
         i ++;
     }
     //convert int -> char
+    int reverse = 0;
     for (int j = numOfBits-1; j >= 0; j--) {
-        binaryArray[j] = '0' + remainderArray[j];
+        binaryArray[reverse] = '0' + remainderArray[j];
+        reverse ++;
     }
-    return binaryArray;
+    string strArray(binaryArray);
+    return strArray.substr(0,numOfBits);
 }
 
 /**
@@ -220,7 +305,6 @@ string Menu::convertToBinary(int number, int numOfBits){
  * @return int The decimal number
  */
 int Menu::convertToDecimal(string number, int numOfBits){
-    
     //initialise values
     int counter = 0;
     int decimal = 0;
@@ -228,7 +312,7 @@ int Menu::convertToDecimal(string number, int numOfBits){
     for(int i = numOfBits-1; i >= 0; i--) {
         //if 1 then add to total
         if(number[i] == '1') {
-            decimal = decimal + (2^counter);
+            decimal = decimal + (pow(2, counter));
         }
         counter++;
     }
@@ -274,9 +358,13 @@ string Menu::createRandomSeed(int Size){
     }
 
     // Return the seed
-    return seed;
+    string strseed(seed);
+    return strseed.substr(0,Size);
 }
 
+/**
+ * @brief Loads a preset for a 1D automaton
+ */
 void Menu::loadPreset(){
     // Check if file exists
     ifstream in;
@@ -329,8 +417,20 @@ void Menu::loadPreset(){
     run1DAutomaton(width, numberOfIterations, seed, rule, wrap);
 }
 
+/**
+ * @brief Run a 1D automaton
+ * 
+ * @param width The width of the 1D automaton
+ * @param numberOfIterations The number of iterations (generations) to generate
+ * @param seed The start value for the automaton
+ * @param rule The ruleset by which a cell's value is decided each generation
+ * @param wrap Whether the ends of the automaton are connected (true) or separated (false)
+ */
 void Menu::run1DAutomaton(int width, int numberOfIterations, string seed, string rule, bool wrap){
+    // Create automaton
     Automaton1D automaton(width,numberOfIterations,seed,rule,wrap);
+    
+    // Attempt to run automaton
     cout << "Displaying automaton generations below...\n" << endl;
     try{
         automaton.runAutomaton();
@@ -341,29 +441,140 @@ void Menu::run1DAutomaton(int width, int numberOfIterations, string seed, string
     }
     cout << endl;
 
+    // Ask if user wants to save the output
     cout << "Do you want to save the output to a text file? [0] yes [1] no" << endl;
     int textSave = getUserChoice(0,1);
 
+    // If the user confirms
     if(textSave == 0){
-        // Save to text file here
+        cout << "Please enter the name of your text file: ";
+        
+        // Read in file name
+        string filename;
+        cin >> filename;
+
+        try{
+            automaton.saveAutomaton(filename);
+        }
+        catch(exception& e){
+            cout << "Saving the automaton returned an error message: " << e.what() << endl;
+        }
     }
 
-    cout << "Do you want to save this automaton as a preset? [0] yes [1] no" << endl;
+    // Ask if the user wants to save the preset
+    cout << "\nDo you want to save this automaton as a preset? [0] yes [1] no" << endl;
     int presetSave = getUserChoice(0,1);
 
+    // If the user confirms
     if(presetSave == 0){
-        // Save preset here
+        cout << "Please enter the name of your preset: ";
+
+        // Read in preset name
+        string presetname;
+        cin >> presetname;
+
+        try{
+            automaton.saveAsPreset(presetname);
+        }
+        catch(exception& e){
+            cout << "Saving the preset returned an error message: " << e.what() << endl;
+        }
     }
+    cout << endl;
 }
 
+/**
+ * @brief Creates and runs a 2D Automaton
+ * 
+ * @param width The width of the map
+ * @param height The height of the map
+ * @param numberOfIterations The number of iterations (generations) to produce
+ * @param seed The seed for the automaton
+ */
 void Menu::run2DAutomaton(int width, int height, int numberOfIterations, string seed){
     bool wrap = false;
 
-    // Implement
+    // Create automaton
+    
+    // Attempt to run automaton
+    cout << "Displaying automaton generations below...\n" << endl;
+    try{
+        Automaton2D automaton(width,height,numberOfIterations,seed,wrap);
+        automaton.runAutomaton();
+
+        cout << endl;
+
+        // Ask if user wants to save the output
+        cout << "Do you want to save the output to a text file? [0] yes [1] no" << endl;
+        int textSave = getUserChoice(0,1);
+
+        // If the user confirms
+        if(textSave == 0){
+            cout << "Please enter the name of your text file: ";
+            
+            // Read in file name
+            string filename;
+            cin >> filename;
+
+            try{
+                automaton.saveAutomaton(filename);
+            }
+            catch(exception& e){
+                cout << "Saving the automaton returned an error message: " << e.what() << endl;
+            }
+        }
+    }
+    catch(exception& e){
+        cout << "The Automaton simulation returned an error message: " << e.what() << endl;
+        return;
+    }
+    
+    cout << endl;
 }
 
+/**
+ * @brief Creates and runs a 2D Automaton in 3D (wrapped) mode (torus shape)
+ * 
+ * @param width The width of the map
+ * @param height The height of the map
+ * @param numberOfIterations The number of iterations (generations) to produce
+ * @param seed The seed for the automaton
+ */
 void Menu::run3DAutomaton(int width, int height, int numberOfIterations, string seed){
     bool wrap = true;
 
-    // Implement
+    // Create automaton
+    Automaton2D automaton(width,height,numberOfIterations,seed,wrap);
+    
+    // Attempt to run automaton
+    cout << "Displaying automaton generations below...\n" << endl;
+    try{
+        automaton.runAutomaton();
+    }
+    catch(exception& e){
+        cout << "The Automaton simulation returned an error message: " << e.what() << endl;
+        return;
+    }
+    cout << endl;
+
+    // Ask if user wants to save the output
+    cout << "Do you want to save the output to a text file? [0] yes [1] no" << endl;
+    int textSave = getUserChoice(0,1);
+
+    // If the user confirms
+    if(textSave == 0){
+        cout << "Please enter the name of your text file: ";
+        
+        // Read in file name
+        string filename;
+        cin >> filename;
+
+        try{
+            automaton.saveAutomaton(filename);
+        }
+        catch(exception& e){
+            cout << "Saving the automaton returned an error message: " << e.what() << endl;
+        }
+    }
+    cout << endl;
 }

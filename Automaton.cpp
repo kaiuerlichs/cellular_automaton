@@ -13,43 +13,11 @@
 
 // Required std includes and namespace setting
 #include "Automaton.h"
+#include "helper.h"
 #include <iostream>
 #include <fstream>
 #include <sstream>
 using namespace std;
-
-
-
-/* Support functions */
-
-/**
- * @brief A function to tokenize a string based on a delimiter and return a corresponding vector
- * 
- * @param str The string to tokenize
- * @param c The delimter character
- * @return vector<string> A vector of string tokens
- * 
- * @authors https://stackoverflow.com/questions/53849/how-do-i-tokenize-a-string-in-c
- * @note Comments added by group members
- */
-vector<string> strsplit(const char *str, char c = ' '){
-    // A vector to hold the tokens
-    vector<string> result;
-
-    // Iterate over string and push-back when delimiter found
-    do
-    {
-        const char *begin = str;
-
-        while(*str != c && *str)
-            str++;
-
-        result.push_back(string(begin, str));
-    } while (0 != *str++);
-
-    // Return the results
-    return result;
-}
 
 
 
@@ -261,17 +229,24 @@ Automaton2D::Automaton2D(int width, int height, int numberOfIterations, string s
     // Initialise iter vector and Generation structs
     iter.assign(numberOfIterations+1, Generation2D(width, height));
 
-    // Add the first generation into the vector
-    vector<string> tokens = strsplit(seed.c_str(), ' ');
-    for(string s : tokens){
-        int x = stoi(s.substr(0,s.find(",")));
-        int y = stoi(s.substr(s.find(",")+1));
+    if(!seed.empty()){
+        // Add the first generation into the vector
+        vector<string> tokens = strsplit(seed.c_str(), ' ');
+        for(string s : tokens){
+            try{
+                int x = stoi(s.substr(0,s.find(",")));
+                int y = stoi(s.substr(s.find(",")+1));
 
-        if(x < 0 || x > width || y < 0 || y > height){
-            throw invalid_argument("Seed contains invalid coordinates");
+                if(x < 0 || x > width || y < 0 || y > height){
+                    throw invalid_argument("Seed contains invalid coordinates");
+                }
+
+                iter[0].generation[x-1][y-1] = '1';
+            }
+            catch(exception& e){
+                throw invalid_argument("Seed contains invalid characters");
+            }
         }
-
-        iter[0].generation[x-1][y-1] = '1';
     }
 }
 
