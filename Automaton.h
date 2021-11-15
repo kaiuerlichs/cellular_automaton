@@ -1,5 +1,5 @@
 /**
- * FILE: Automaton.cpp
+ * FILE: Automaton.h
  * 
  * GROUP: C
  * Ross Coombs
@@ -49,7 +49,7 @@ class Automaton {
         bool generationDone;
     public:
         virtual void runAutomaton() { };
-        virtual void saveAutomaton(string filename) { };
+        virtual void saveAutomaton(string filename) { (void) filename; };
         int getNumberOfIterations() { return numberOfIterations; }
         void setNumberOfIterations(int i) { numberOfIterations = i; }
 };
