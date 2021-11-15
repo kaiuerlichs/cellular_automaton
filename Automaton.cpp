@@ -234,8 +234,6 @@ void Automaton1D::saveAsPreset(string presetName){
 
 
 
-
-
 /* AUTOMATON 2D IMPLEMENTATIONS */
 
 /**
