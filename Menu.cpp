@@ -71,26 +71,26 @@ int main()
 void Menu::displayMainMenu(){
     int userChoice;
     do{
-        std::cout<<"[0] Quit\n[1] Run 1D Program\n[2] Use Converters\n";
+        std::cout<<"\n[0] Quit\n[1] Run 1D Program\n[2] Use Converters\n";
         userChoice = getUserChoice(0, 2);
         switch(userChoice) {
             case 0:
-                std::cout<<"~~ Exiting ~~" << endl;
+                std::cout<<"\n~~ Exiting ~~" << endl;
                 userChoice = 0;
                 break;
             case 1: { // {} to makevariables local to this case
                 //get informations
-                std::cout<<"Please enter width:" << endl;
+                std::cout<<"\nPlease enter width:" << endl;
                 int width = getUserChoice(1, 100);
 
-                std::cout<<"Please enter number of iterations:" << endl;
+                std::cout<<"\nPlease enter number of iterations:" << endl;
                 int iterations = getUserChoice(1, 1000);
 
-                std::cout<<"Please enter rule:" << endl;
+                std::cout<<"\nPlease enter rule:" << endl;
                 string rule;
                 cin >> rule;
 
-                std::cout<<"Should automaton be wrapped [0]false [1]true:" << endl;
+                std::cout<<"\nShould automaton be wrapped [0]false [1]true:" << endl;
                 int wrappedChoice = getUserChoice(0, 1);
                 bool wrapped;
                 if(wrappedChoice == 1) {
@@ -102,7 +102,8 @@ void Menu::displayMainMenu(){
                 
                 string seed;
                 do {
-                    std::cout<<"Please enter the seed (must be " << width << " long: " << endl;
+                    std::cout<<"\nPlease enter the seed (must be " << width << " long): " << endl;
+                    seed = getUserChoice(0,(2*10)^width);
                 } while((int)seed.length() != width);
 
                 //run automaton
@@ -110,35 +111,35 @@ void Menu::displayMainMenu(){
                 automaton.runAutomaton();
 
                 //saving
-                std::cout<<"Would you like to save this output to a file?\n[0] No [1] Yes" << endl;
+                std::cout<<"\nWould you like to save this output to a file?\n[0] No\n[1] Yes" << endl;
                 int saveChoice = getUserChoice(0, 1);
                 if(saveChoice == 1) {
-                    std::cout<<"-- save to file --";
+                    std::cout<<"\n-- save to file --";
                 }
-                std::cout<<"Would you like to save this as a preset?\n[0] No [1] Yes" << endl;
+                std::cout<<"\nWould you like to save this as a preset?\n[0] No\n[1] Yes" << endl;
                 saveChoice = getUserChoice(0, 1);
                 if(saveChoice == 1) {
-                    std::cout<<"-- save as preset --";
+                    std::cout<<"\n-- save as preset --";
                 }
                 break;
             }
             case 2: { // {} to makevariables local to this case
-                std::cout<<"Which way would you like to convert?\n[0] Binary->Decimal [1] Decimal->Binary" << endl;
+                std::cout<<"\nWhich way would you like to convert?\n[0] Binary->Decimal\n[1] Decimal->Binary" << endl;
                 int convertChoice = getUserChoice(0, 1);
                 if(convertChoice == 1) {
-                    std::cout<<"-- binary conv --";
+                    std::cout<<"\n-- binary conv --";
                 } else if (convertChoice == 2)
                 {
-                    std::cout<<"Enter how many bits you'd like to store this in" << endl;
+                    std::cout<<"\nEnter how many bits you'd like to store this in" << endl;
                     int bits = getUserChoice(1, 64);
-                    std::cout<<"Enter decimal number you'd like to convert (maximum " << (2^bits) << endl;
+                    std::cout<<"\nEnter decimal number you'd like to convert (maximum " << (2^bits) << ")" << endl;
                     int decimal = getUserChoice(1, (2^bits));
                     convertToBinary(bits, decimal);
                 }
                 break;
             }
             default:
-                std::cout<<"invalid";
+                std::cout<<"\ninvalid";
                 break;
         }
     } while(userChoice!=0);
