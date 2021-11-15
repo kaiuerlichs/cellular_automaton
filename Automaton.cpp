@@ -229,17 +229,24 @@ Automaton2D::Automaton2D(int width, int height, int numberOfIterations, string s
     // Initialise iter vector and Generation structs
     iter.assign(numberOfIterations+1, Generation2D(width, height));
 
-    // Add the first generation into the vector
-    vector<string> tokens = strsplit(seed.c_str(), ' ');
-    for(string s : tokens){
-        int x = stoi(s.substr(0,s.find(",")));
-        int y = stoi(s.substr(s.find(",")+1));
+    if(!seed.empty()){
+        // Add the first generation into the vector
+        vector<string> tokens = strsplit(seed.c_str(), ' ');
+        for(string s : tokens){
+            try{
+                int x = stoi(s.substr(0,s.find(",")));
+                int y = stoi(s.substr(s.find(",")+1));
 
-        if(x < 0 || x > width || y < 0 || y > height){
-            throw invalid_argument("Seed contains invalid coordinates");
+                if(x < 0 || x > width || y < 0 || y > height){
+                    throw invalid_argument("Seed contains invalid coordinates");
+                }
+
+                iter[0].generation[x-1][y-1] = '1';
+            }
+            catch(exception& e){
+                throw invalid_argument("Seed contains invalid characters");
+            }
         }
-
-        iter[0].generation[x-1][y-1] = '1';
     }
 }
 
