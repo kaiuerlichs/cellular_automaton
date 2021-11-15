@@ -31,10 +31,7 @@ using namespace std;
 int main()
 {
     Menu menu;
-    //menu.displayMainMenu();
-    //cout << menu.convertToBinary(0,8);
-    cout << menu.convertToDecimal(menu.convertToBinary(0,8), 8);
-    cout << menu.convertToDecimal(menu.convertToBinary(43,8), 8);
+    menu.displayMainMenu();
 }
 
 /**
@@ -43,26 +40,62 @@ int main()
 void Menu::displayMainMenu(){
     int userChoice;
     do{
-        std::cout<<"\n[0] Quit\n[1] Run 1D Program\n[2] Use Converters\n";
-        userChoice = getUserChoice(0, 2);
+        cout << CYAN << "~~ Automaton Simulation ~~" << RESET << endl;
+
+        cout << "\n[0] Quit" << endl; 
+        cout << "[1] Create 1D Automaton" << endl;
+        cout << "[2] Create Conway's Game of Life (2D plane)" << endl;
+        cout << "[3] Create Conway's Game of Life (3D torus)" << endl;
+        cout << "[4] Load 1D Automaton from preset" << endl;
+        cout << "[5] Display automaton output file" << endl;
+        cout << "[6] Binary - decimal conversion\n" << endl;
+
+        userChoice = getUserChoice(0, 6);
         switch(userChoice) {
+            // Quit
             case 0:
-                std::cout<<"\n~~ Exiting ~~" << endl;
+                cout<<"\n~~ Exiting ~~" << endl;
                 userChoice = 0;
                 break;
-            case 1: { // {} to makevariables local to this case
-                //get informations
-                std::cout<<"\nPlease enter width:" << endl;
+
+            // Create 1D Automaton
+            case 1: { 
+                // Get width from user
+                std::cout<<"\nPlease enter width..." << endl;
                 int width = getUserChoice(1, 100);
 
-                std::cout<<"\nPlease enter number of iterations:" << endl;
+                // Get iteration count from user
+                std::cout<<"\nPlease enter number of iterations..." << endl;
                 int iterations = getUserChoice(1, 1000);
 
-                std::cout<<"\nPlease enter rule:" << endl;
+                // Get rule from user
+                cout<<"\nPlease enter rule (either in 8-bit binary form, or a decimal number between 0 and 255 inclusive)..." << endl;
                 string rule;
                 cin >> rule;
 
-                std::cout<<"\nShould automaton be wrapped [0]false [1]true:" << endl;
+                // Validate rule input
+                try{
+                    int ruleNum = stoi(rule);
+                    if (ruleNum >= 0 && ruleNum < 256){
+                        rule = convertToBinary(ruleNum, 8);
+                    }
+                    else{
+                        if((int) rule.length() != 8){
+                                throw invalid_argument("Rule is not 8 bit");
+                            }
+                        for(int i = 0; i < (int) rule.length(); i++){
+                            if(!(rule.at(i) == '1' || rule.at(i) == '0')){
+                                throw invalid_argument("Rule is not binary");
+                            }
+                        }
+                    }
+                }
+                catch(invalid_argument& e1){
+                    cout << "\nThe rule entered is not valid." << endl;
+                    break;
+                }
+
+                std::cout<<"\nShould automaton be wrapped... [0]false [1]true:" << endl;
                 int wrappedChoice = getUserChoice(0, 1);
                 bool wrapped;
                 if(wrappedChoice == 1) {
@@ -95,30 +128,38 @@ void Menu::displayMainMenu(){
                 }
                 break;
             }
+
+            // Create 2D Automaton
             case 2: { // {} to makevariables local to this case
-                std::cout<<"\nWhich way would you like to convert?\n[0] Binary->Decimal\n[1] Decimal->Binary" << endl;
-                int convertChoice = getUserChoice(0, 1);
-                if(convertChoice == 0) {
-                    std::cout<<"\nEnter how many bits the binary number has" << endl;
-                    int bits = getUserChoice(1, 64);
-                    std::cout<<"\nEnter binary number you'd like to convert (maximum " << (pow(2, bits)) << ")" << endl;
-                    int binary = getUserChoice(1, (pow(2, bits)));
-                    cout << binary;
-                    //cout << convertToDecimal(binary, bits);
-                } else if (convertChoice == 1)
-                {
-                    std::cout<<"\nEnter how many bits you'd like to store this in" << endl;
-                    int bits = getUserChoice(1, 64);
-                    std::cout<<"\nEnter decimal number you'd like to convert (maximum " << (pow(2, bits)) << ")" << endl;
-                    int decimal = getUserChoice(1, (pow(2, bits)));
-                    cout << convertToBinary(decimal, bits);
-                }
                 break;
             }
+
+            // Create 3D Automaton
+            case 3: {
+                break;
+            }
+
+            // Load 1D Automaton from preset
+            case 4: {
+                break;
+            }
+
+            // Display automaton output file
+            case 5: {
+                break;
+            }
+
+            // Binary - decimal conversion
+            case 6: {
+                break;
+            }
+
+            // Default case (failsafe only)
             default:
-                std::cout<<"\ninvalid";
+                cout<<"\nThe input received is invalid" << endl;
                 break;
         }
+        cout << endl;
     } while(userChoice!=0);
 }
 

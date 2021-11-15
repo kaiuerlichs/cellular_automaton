@@ -17,7 +17,10 @@
 
 
 
-// Required includes and namespace setting
+// Required includes, defines and namespace setting
+#define RESET   "\033[0m"
+#define CYAN    "\033[36m"
+
 #include <string>
 using namespace std;
 
