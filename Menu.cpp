@@ -15,8 +15,44 @@
 #include "Menu.h"
 #include "Automaton.h"
 #include <iostream>
+#include <fstream>
 #include <ctime>
 using namespace std;
+
+
+
+/* Support functions */
+
+/**
+ * @brief A function to tokenize a string based on a delimiter and return a corresponding vector
+ * 
+ * @param str The string to tokenize
+ * @param c The delimter character
+ * @return vector<string> A vector of string tokens
+ * 
+ * @authors https://stackoverflow.com/questions/53849/how-do-i-tokenize-a-string-in-c
+ * @note Comments added by group members
+ */
+vector<string> strsplit(const char *str, char c = ' '){
+    // A vector to hold the tokens
+    vector<string> result;
+
+    // Iterate over string and push-back when delimiter found
+    do
+    {
+        const char *begin = str;
+
+        while(*str != c && *str)
+            str++;
+
+        result.push_back(string(begin, str));
+    } while (0 != *str++);
+
+    // Return the results
+    return result;
+}
+
+
 
 /**
  * @brief This is the main method of the Automaton program
@@ -26,8 +62,7 @@ using namespace std;
 int main()
 {
     Menu menu;
-    // menu.displayMainMenu();
-    cout << menu.createRandomSeed(8);
+    menu.loadPreset();
 }
 
 /**
@@ -37,7 +72,7 @@ void Menu::displayMainMenu(){
     int userChoice;
     do{
         std::cout<<"[0] Quit\n[1] Run 1D Program\n[2] Use Converters\n";
-        userChoice = getUserChoice(0, 1);
+        userChoice = getUserChoice(0, 2);
         switch(userChoice) {
             case 0:
                 std::cout<<"~~ Exiting ~~" << endl;
@@ -242,6 +277,90 @@ string Menu::createRandomSeed(int Size){
     return seed;
 }
 
-  
+void Menu::loadPreset(){
+    // Check if file exists
+    ifstream in;
+    in.open("preset.txt");
+    if(!in){
+        cout << "No presets are currenly saved, or the preset.txt file was deleted." << endl;
+        return;
+    }
 
+    cout << "Please select one of the presets below..." << endl;
 
+    string str;
+    int counter = 1;
+    while (in >> str)
+    {
+        vector<string> tokens = strsplit(str.c_str(),';');
+        cout << "[" << counter << "]" << " " << tokens[0] << endl;
+        counter++;
+    }
+
+    int selection = getUserChoice(1,counter-1);
+
+    in.clear();
+    in.seekg (0, ios::beg);
+
+    string preset;
+    for(int i =0; i < selection; i++){
+        in >> preset;
+    }
+
+    in.close();
+
+    vector<string> params = strsplit(preset.c_str(),';');
+    
+    int width = stoi(params[1]);
+    int numberOfIterations = stoi(params[2]);
+    string seed = params[3];
+    string rule = params[4];
+    bool wrap;
+    if(params[5] == "true"){
+        wrap = true;
+    }
+    else{
+        wrap = false;
+    }
+
+    run1DAutomaton(width, numberOfIterations, seed, rule, wrap);
+}
+
+void Menu::run1DAutomaton(int width, int numberOfIterations, string seed, string rule, bool wrap){
+    Automaton1D automaton(width,numberOfIterations,seed,rule,wrap);
+    cout << "Displaying automaton generations below...\n" << endl;
+    try{
+        automaton.runAutomaton();
+    }
+    catch(exception& e){
+        cout << "The Automaton simulation returned an error message: " << e.what() << endl;
+        return;
+    }
+    cout << endl;
+
+    cout << "Do you want to save the output to a text file? [0] yes [1] no" << endl;
+    int textSave = getUserChoice(0,1);
+
+    if(textSave == 0){
+        // Save to text file here
+    }
+
+    cout << "Do you want to save this automaton as a preset? [0] yes [1] no" << endl;
+    int presetSave = getUserChoice(0,1);
+
+    if(presetSave == 0){
+        // Save preset here
+    }
+}
+
+void Menu::run2DAutomaton(int width, int height, int numberOfIterations, string seed){
+    bool wrap = false;
+
+    // Implement
+}
+
+void Menu::run3DAutomaton(int width, int height, int numberOfIterations, string seed){
+    bool wrap = true;
+
+    // Implement
+}
